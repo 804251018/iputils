@@ -86,6 +86,7 @@ endif
 LIB_RESOLV = $(call FUNC_LIB,$(USE_RESOLV),$(LDFLAG_RESOLV))
 
 # USE_CAP:  DEF_CAP, LIB_CAP
+#检查函数库CAP中的函数是否有重合
 #
 ifneq ($(USE_CAP),no)
 	DEF_CAP = -DCAPABILITIES
@@ -93,12 +94,14 @@ ifneq ($(USE_CAP),no)
 endif
 
 # USE_SYSFS: DEF_SYSFS, LIB_SYSFS
+#检查SYSFS函数库中的函数是否有重合
 ifneq ($(USE_SYSFS),no)
 	DEF_SYSFS = -DUSE_SYSFS
 	LIB_SYSFS = $(call FUNC_LIB,$(USE_SYSFS),$(LDFLAG_SYSFS))
 endif
 
 # USE_IDN: DEF_IDN, LIB_IDN
+#检查函数库IDN中的函数是否有重合
 ifneq ($(USE_IDN),no)
 	DEF_IDN = -DUSE_IDN
 	LIB_IDN = $(call FUNC_LIB,$(USE_IDN),$(LDFLAG_IDN))
@@ -138,6 +141,7 @@ TAG:=$(shell date --date=$(TODAY) +s%Y%m%d)
 
 
 # -------------------------------------
+#检查内核在编译过程中产生的多余的文件并且清除
 .PHONY: all ninfod clean distclean man html check-kernel modules snapshot
 
 all: $(TARGETS)
@@ -163,7 +167,7 @@ $(TARGETS): %: %.o
 
 # -------------------------------------
 # arping
-#设置arping
+#向临近主机发送ARP请求
 DEF_arping = $(DEF_SYSFS) $(DEF_CAP) $(DEF_IDN) $(DEF_WITHOUT_IFADDRS)
 LIB_arping = $(LIB_SYSFS) $(LIB_CAP) $(LIB_IDN)
 #执行条件语句
@@ -172,7 +176,7 @@ DEF_arping += -DDEFAULT_DEVICE=\"$(ARPING_DEFAULT_DEVICE)\"
 endif
 
 # clockdiff
-#clockdiffcheng程序检由clockdiff.c件l文件 构成，主机测试间差
+#clockdiffcheng程序检由clockdiff.c件l文件 构成，测试两台计算机在的ip连接
 DEF_clockdiff = $(DEF_CAP)
 LIB_clockdiff = $(LIB_CAP)
 
@@ -190,6 +194,7 @@ ping.o ping_common.o: ping_common.h
 ping6.o: ping_common.h in6_flowlabel.h
 
 # rarpd
+#逆地址解析服务器端程序，rarpd程序由rarpd.c文件
 DEF_rarpd =
 LIB_rarpd =
 
@@ -236,17 +241,15 @@ endif
 modules: check-kernel
 	$(MAKE) KERNEL_INCLUDE=$(KERNEL_INCLUDE) -C Modules
 
-# -------------------------------------
-#生成man帮助文档
-#生成html网页文档
-#通过clean可以删除上次执行时生成的文件目标文件和可执行文件
+# -----------------------------------
+
 man:
-	$(MAKE) -C doc man
+	$(MAKE) -C doc man            #生成man帮助文档
 
 html:
-	$(MAKE) -C doc html
+	$(MAKE) -C doc html           #生成html网页文档
 
-clean:
+clean:                                # 可以通过clean这个伪目标手动删除程序执行过程中的文件
 	@rm -f *.o $(TARGETS)
 	@$(MAKE) -C Modules clean
 	@$(MAKE) -C doc clean
