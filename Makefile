@@ -166,13 +166,13 @@ $(TARGETS): %: %.o
 #设置arping
 DEF_arping = $(DEF_SYSFS) $(DEF_CAP) $(DEF_IDN) $(DEF_WITHOUT_IFADDRS)
 LIB_arping = $(LIB_SYSFS) $(LIB_CAP) $(LIB_IDN)
-
+#执行条件语句
 ifneq ($(ARPING_DEFAULT_DEVICE),)
 DEF_arping += -DDEFAULT_DEVICE=\"$(ARPING_DEFAULT_DEVICE)\"
 endif
 
 # clockdiff
-#设置clockdiff 检测两台linux主机的时间差
+#clockdiffcheng程序检由clockdiff.c件l文件 构成，主机测试间差
 DEF_clockdiff = $(DEF_CAP)
 LIB_clockdiff = $(LIB_CAP)
 
@@ -226,28 +226,20 @@ ninfod:
 			./configure; \
 			cd ..; \
 		fi; \
-		$(MAKE) -C ninfod
-
-# -------------------------------------
-# modules / check-kernel are only for ancient kernels; obsolete
-#对内核进行检测
-#仅检测较低版本的内核
-check-kernel:
-ifeq ($(KERNEL_INCLUDE),)
 	@echo "Please, set correct KERNEL_INCLUDE"; false
 else
 	@set -e; \
 	if [ ! -r $(KERNEL_INCLUDE)/linux/autoconf.h ]; then \
 		echo "Please, set correct KERNEL_INCLUDE"; false; fi
 endif
-#内核检测模块
+#检测内核
 modules: check-kernel
 	$(MAKE) KERNEL_INCLUDE=$(KERNEL_INCLUDE) -C Modules
 
 # -------------------------------------
-#生成帮助文档
-#生成html文档
-#distclean:清除上次的make命令所产生的object文件
+#生成man帮助文档
+#生成html网页文档
+#通过clean可以删除上次执行时生成的文件目标文件和可执行文件
 man:
 	$(MAKE) -C doc man
 
