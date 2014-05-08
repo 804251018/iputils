@@ -74,6 +74,7 @@ FUNC_LIB = $(if $(filter static,$(1)),$(LDFLAG_STATIC) $(2) $(LDFLAG_DYNAMIC),$(
 # USE_CRYPTO: LIB_CRYPTO
 #将一个变量和其他变量值进行比较，或将一个变量与一个字符串进行比较。这样可以根据变量的值执行或者忽虐Makefile
 #文件中的部分脚本
+#调用实现调用GNUTLS实现TLS的加密协议，判断GNUTLS库中的函数是否重合，去掉多余部分
 ifneq ($(USE_GNUTLS),no)
 	LIB_CRYPTO = $(call FUNC_LIB,$(USE_GNUTLS),$(LDFLAG_GNUTLS))
 	DEF_CRYPTO = -DUSE_GNUTLS
@@ -85,6 +86,7 @@ endif
 LIB_RESOLV = $(call FUNC_LIB,$(USE_RESOLV),$(LDFLAG_RESOLV))
 
 # USE_CAP:  DEF_CAP, LIB_CAP
+#
 ifneq ($(USE_CAP),no)
 	DEF_CAP = -DCAPABILITIES
 	LIB_CAP = $(call FUNC_LIB,$(USE_CAP),$(LDFLAG_CAP))
