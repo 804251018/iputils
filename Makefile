@@ -23,7 +23,9 @@ LDFLAG_SYSFS=-lsysfs
 # Options
 #
 #变量定义，设置开关
+#
 # Capability support (with libcap) [yes|static|no]
+#获得用于捕获网络数据包的数据包描述字
 USE_CAP=yes
 # sysfs support (with libsysfs - deprecated) [no|yes|static]
 USE_SYSFS=no
