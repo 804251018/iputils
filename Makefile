@@ -5,14 +5,13 @@
 # CC
 #指定gcc程序
 CC=gcc
-# Path to parent kernel include files directory
-#编程所需大部分头文件存放地址
-LIBC_INCLUDE=/usr/include
-# Libraries
-ADDLIB=
 # Linker flags
+#Wl选项告诉编译器将后面的参数传递给链接器
+#-Wl,-Bstatic告诉链接器使用-Bstatic选项，该选项是告诉链接器，对接下来的-l选项使用静态链接
+#-Wl,-Bdynamic就是告诉链接器对接下来的-l选项使用动态链接
 LDFLAG_STATIC=-Wl,-Bstatic
 LDFLAG_DYNAMIC=-Wl,-Bdynamic
+#指定加载库
 LDFLAG_CAP=-lcap
 LDFLAG_GNUTLS=-lgnutls-openssl
 LDFLAG_CRYPTO=-lcrypto
@@ -23,7 +22,7 @@ LDFLAG_SYSFS=-lsysfs
 #
 # Options
 #
-
+#变量定义，设置开关
 # Capability support (with libcap) [yes|static|no]
 USE_CAP=yes
 # sysfs support (with libsysfs - deprecated) [no|yes|static]
@@ -133,6 +132,13 @@ all: $(TARGETS)
 	$(COMPILE.c) $< $(DEF_$(patsubst %.o,%,$@)) -o $@
 $(TARGETS): %: %.o
 	$(LINK.o) $^ $(LIB_$@) $(LDLIBS) -o $@
+#
+#COMPILE.c=$(CC) $(CFLAGS) $(CPPFLAGS) -c
+#$< 依赖目标中的第一个目标名字 
+#$@ 表示目标
+# $^ 所有的依赖目标的集合 
+# 在$(patsubst %.o,%,$@ )中，patsubst把目标中的变量符合后缀是.o的全部删除,  DEF_ping
+# LINK.o把.o文件链接在一起的命令行,缺省值是$(CC) $(LDFLAGS) $(TARGET_ARCH)
 
 # -------------------------------------
 # arping
