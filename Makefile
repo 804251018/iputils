@@ -3,8 +3,10 @@
 #
 
 # CC
+#指定gcc程序
 CC=gcc
 # Path to parent kernel include files directory
+#编程所需大部分头文件存放地址
 LIBC_INCLUDE=/usr/include
 # Libraries
 ADDLIB=
