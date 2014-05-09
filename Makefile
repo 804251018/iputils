@@ -267,9 +267,9 @@ distclean: clean
 # -------------------------------------
 snapshot:
 	@if [ x"$(UNAME_N)" != x"pleiades" ]; then echo "Not authorized to advance snapshot"; exit 1; fi
-	@echo "[$(TAG)]" > RELNOTES.NEW
-	@echo >>RELNOTES.NEW
-	@git log --no-merges $(LASTTAG).. | git shortlog >> RELNOTES.NEW
+	@echo "[$(TAG)]" > RELNOTES.NEW    #导入新的版本更新信息
+	@echo >>RELNOTES.NEW               
+	@git log --no-merges $(LASTTAG).. | git shortlog >> RELNOTES.NEW  #合并并且产生新的信息
 	@echo >> RELNOTES.NEW
 	@cat RELNOTES >> RELNOTES.NEW
 	@mv RELNOTES.NEW RELNOTES
